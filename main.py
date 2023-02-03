@@ -20,6 +20,8 @@ def Euclide(a,b):
     return (u,v)
 
 
+
+
 def test_Euclide():
     nb_test = 10000
     file  = open(FILE_NAME,"a")
@@ -39,8 +41,48 @@ def test_Euclide():
         print ("la fonction Euclide est verifiée") 
 
 
+# Question 4  ------------------------------
+
+def ExpMod(g,a,p):
+    if (p == 1):
+        return 0
+    res = 1
+    temp = g % p
+    while a >0 :
+        if ( a % 2 == 1):
+            res = ( res * temp ) %p
+        temp = (temp * temp) % p 
+        a = a//2
+    return res
+
+
+
+def test_ExpMod():
+    nb_test = 10000
+    file  = open(FILE_NAME,"a")
+    file.write("\n\n\n\n\n\n------> Les 5 premières occurences du test de la fonction ExpMod()  : \n\n")
+    cpt = 0
+    for i in range(0,nb_test):
+        a = random.getrandbits(1024)    # generation d'un nombre aléatoire de 1024 bits (avec fonction de la librery Crypto)
+        res = ExpMod(G,a,P) 
+        if res == pow(G,a,P) :  # verifier que (a et P) sont premiers | idem PGCD(a,P) = 1  
+            print ( 'iteration '+ str(i) + '  --> correct') 
+            cpt = cpt + 1 
+            if i < 5:   # écrire les 5 premiere iterations dans le fichier de test 
+                string  =  "Itération "+ str(i+1) + " :\n"+"g = "+ str(G)+"\n"+"a = "+ str(a)+"\n"+"p = "+ str(P)+"\n"+"res = ExpMod(g,a,p)= "+ str(res)+"\n"
+                file.write(string)
+
+    if (cpt == nb_test):
+        print ("la fonction ExpMod est verifiée") 
+
+
+
+# Question 4  ------------------------------
+
+
 
 
 if __name__ == '__main__':
     open(FILE_NAME,"w")  # créer un nouveau fichier
     test_Euclide()
+    test_ExpMod()
