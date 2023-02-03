@@ -28,7 +28,7 @@ def test_Euclide():
     file.write("------> Les 5 premières occurences du test de la fonction Euclide()  : \n\n")
     cpt = 0
     for i in range(0,nb_test):
-        a = random.getrandbits(1024)    # generation d'un nombre aléatoire de 1024 bits (avec fonction de la librery Crypto)
+        a = random.getrandbits(1024)    # generation d'un nombre aléatoire de 1024 bits
         (u,v) = Euclide(a,P)
         if (u*a+v*P) == 1 :  # verifier que (a et P) sont premiers | idem PGCD(a,P) = 1  
             print ( 'iteration '+ str(i) + '  --> correct') 
@@ -63,9 +63,9 @@ def test_ExpMod():
     file.write("\n\n\n\n\n\n------> Les 5 premières occurences du test de la fonction ExpMod()  : \n\n")
     cpt = 0
     for i in range(0,nb_test):
-        a = random.getrandbits(1024)    # generation d'un nombre aléatoire de 1024 bits (avec fonction de la librery Crypto)
+        a = random.getrandbits(1024)    # generation d'un nombre aléatoire de 1024 bits
         res = ExpMod(G,a,P) 
-        if res == pow(G,a,P) :  # verifier que (a et P) sont premiers | idem PGCD(a,P) = 1  
+        if res == pow(G,a,P) :  # verifier si le resultat est correcte 
             print ( 'iteration '+ str(i) + '  --> correct') 
             cpt = cpt + 1 
             if i < 5:   # écrire les 5 premiere iterations dans le fichier de test 
