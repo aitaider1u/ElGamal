@@ -20,8 +20,6 @@ def Euclide(a,b):
     return (u,v)
 
 
-
-
 def test_Euclide():
     nb_test = 10000
     file  = open(FILE_NAME,"a")
@@ -56,11 +54,10 @@ def ExpMod(g,a,p):
     return res
 
 
-
 def test_ExpMod():
     nb_test = 10000
     file  = open(FILE_NAME,"a")
-    file.write("\n\n\n\n\n\n------> Les 5 premières occurences du test de la fonction ExpMod()  : \n\n")
+    file.write("\n\n\n\n------> Les 5 premières occurences du test de la fonction ExpMod()  : \n\n")
     cpt = 0
     for i in range(0,nb_test):
         a = random.getrandbits(1024)    # generation d'un nombre aléatoire de 1024 bits
@@ -76,13 +73,72 @@ def test_ExpMod():
         print ("la fonction ExpMod est verifiée") 
 
 
+# question 5 ----------------------------------
 
-# Question 4  ------------------------------
+class KeyPublic:
+    def __init__(self, p, g, X):
+        self.p = p
+        self.g = g
+        self.X = X
+
+class KeySecret:
+    def __init__(self, x):
+        self.x = x
 
 
+def KeyGen(p,g):
+    x = random.randint(2,p-2)
+    X = ExpMod(g,x,p)
+    Kp = KeyPublic(p,g,X)
+    Ks = KeySecret(x)
+    return (Kp,Ks)
+
+
+# Kp : la clé secréte de bob
+# message : le message à chifrer. 
+def Encrypt(Kp,message):
+    r = random.randint(2,Kp.p-2)
+    y = ExpMod(Kp.X,r,Kp.p)
+    C = (message * y)%Kp.p
+    B = ExpMod(Kp.g,r,Kp.p)
+    return (C,B)
+
+
+# Ks : la clé secréte de bob
+# data = (C,B) le couple du resulat de la fonction Encrypt(Kp,message) envoyé par alice
+# Kp : la clé secréte de bob
+def Decrypt(Ks,data,Kp):   
+    (C,B) = data
+    D = ExpMod(B,Ks.x,Kp.p) 
+    D_mod_inv = ExpMod(D,Kp.p-2,Kp.p) #calc modInverse https://stackoverflow.com/questions/4798654/modular-multiplicative-inverse-function-in-python 
+    message = (C*D_mod_inv)%Kp.p
+    return  message
+
+
+def testEncryptAndDecrypt():
+    nb_test = 100
+    cpt = 0
+    file  = open(FILE_NAME,"a")
+    file.write("\n\n\n\n------> Les 5 premières occurences du test des fonctions  KeyGen ,Encrypt et Decrypt  : \n\n")
+    for i in range(0 , 100):
+        messageToEncrypt = random.randint(0,P)                          #generer un message < P
+        (Kp,Ks) = KeyGen(P,G)
+        (C,B) = Encrypt(Kp, messageToEncrypt)
+        messageDecrypted = Decrypt(Ks, (C,B) ,Kp)
+        
+        if (messageToEncrypt == messageDecrypted):
+            print ( 'iteration '+ str(i) + '  --> correct') 
+            cpt = cpt + 1
+            if i < 5:   # écrire les 5 premiere iterations dans le fichier de test 
+                string  =  "Itération "+ str(i+1) + " :\n"+" messageToEncrypt = "+ str(messageToEncrypt)+"\n"+"(C,B) = ( "+str(C)+" , "+str(B)+" )\n"+"messageDecrypted = "+ str(messageDecrypted)+"\n"
+                file.write(string)
+
+    if (cpt == nb_test):
+        print ("la fonction KeyGen ,Encrypt et Decrypt sont verifiées") 
 
 
 if __name__ == '__main__':
     open(FILE_NAME,"w")  # créer un nouveau fichier
     test_Euclide()
     test_ExpMod()
+    testEncryptAndDecrypt()
