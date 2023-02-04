@@ -94,13 +94,17 @@ def KeyGen(p,g):
     return (Kp,Ks)
 
 
+
+global R # varaible globale utile pour test si tous les R génerer sont différents 
+
 # Kp : la clé secréte de bob
 # message : le message à chifrer. 
 def Encrypt(Kp,message):
-    r = random.randint(2,Kp.p-2)
-    y = ExpMod(Kp.X,r,Kp.p)
+    global R
+    R = random.randint(2,Kp.p-2)
+    y = ExpMod(Kp.X,R,Kp.p)
     C = (message * y)%Kp.p
-    B = ExpMod(Kp.g,r,Kp.p)
+    B = ExpMod(Kp.g,R,Kp.p)
     return (C,B)
 
 
@@ -120,14 +124,16 @@ def testEncryptAndDecrypt():
     cpt = 0
     file  = open(FILE_NAME,"a")
     file.write("\n\n\n\n------> Les 5 premières occurences du test des fonctions  KeyGen ,Encrypt et Decrypt  : \n\n")
+    RValues = []
     for i in range(0 , 100):
         messageToEncrypt = random.randint(0,P)                          #generer un message < P
         (Kp,Ks) = KeyGen(P,G)
         (C,B) = Encrypt(Kp, messageToEncrypt)
         messageDecrypted = Decrypt(Ks, (C,B) ,Kp)
         
-        if (messageToEncrypt == messageDecrypted):
+        if ( (messageToEncrypt == messageDecrypted)  and (R not in RValues)):   # test si les message sont les meme et aussi si R n'a pas été deja géneré
             print ( 'iteration '+ str(i) + '  --> correct') 
+            RValues.append(R) # ajouter la variable global R 
             cpt = cpt + 1
             if i < 5:   # écrire les 5 premiere iterations dans le fichier de test 
                 string  =  "Itération "+ str(i+1) + " :\n"+" messageToEncrypt = "+ str(messageToEncrypt)+"\n"+"(C,B) = ( "+str(C)+" , "+str(B)+" )\n"+"messageDecrypted = "+ str(messageDecrypted)+"\n"
@@ -137,8 +143,10 @@ def testEncryptAndDecrypt():
         print ("la fonction KeyGen ,Encrypt et Decrypt sont verifiées") 
 
 
+
+
 if __name__ == '__main__':
     open(FILE_NAME,"w")  # créer un nouveau fichier
-    test_Euclide()
-    test_ExpMod()
+    #test_Euclide()
+    #test_ExpMod()
     testEncryptAndDecrypt()
