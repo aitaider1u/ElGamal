@@ -142,11 +142,25 @@ def testEncryptAndDecrypt():
     if (cpt == nb_test):
         print ("la fonction KeyGen ,Encrypt et Decrypt sont verifiées") 
 
+# Question 6 ------------------------------------------
+
+def testHomomorphicPropertyOfElGamal():
+    m1 = random.randint(0,P)                          
+    m2 = random.randint(0,P)
+    (Kp,Ks) = KeyGen(P,G)     
+    (C1,B1) = Encrypt(Kp, m1)
+    (C2,B2) = Encrypt(Kp, m2)
+    C = (C1*C2) % Kp.p
+    B = (B1*B2) % Kp.p
+    m = Decrypt(Ks, (C,B) ,Kp)
+    if ( m ==  (m1*m2) % Kp.p):
+        print  (" le test de propriété homomorphique de El Gamal est verifié")
 
 
 
 if __name__ == '__main__':
     open(FILE_NAME,"w")  # créer un nouveau fichier
-    #test_Euclide()
-    #test_ExpMod()
+    test_Euclide()
+    test_ExpMod()
     testEncryptAndDecrypt()
+    testHomomorphicPropertyOfElGamal()
