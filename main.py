@@ -113,9 +113,12 @@ def Encrypt(Kp,message):
 # Kp : la clé secréte de bob
 def Decrypt(Ks,data,Kp):   
     (C,B) = data
-    D = ExpMod(B,Ks.x,Kp.p) 
-    D_mod_inv = ExpMod(D,Kp.p-2,Kp.p) #calc modInverse https://stackoverflow.com/questions/4798654/modular-multiplicative-inverse-function-in-python 
-    message = (C*D_mod_inv)%Kp.p
+    D = ExpMod(B,Ks.x,Kp.p)
+
+    (u,v) = Euclide(D,Kp.p)
+    D_1 = u % Kp.p  
+    
+    message = (C*D_1)%Kp.p
     return  message
 
 
@@ -145,22 +148,27 @@ def testEncryptAndDecrypt():
 # Question 6 ------------------------------------------
 
 def testHomomorphicPropertyOfElGamal():
-    m1 = random.randint(0,P)                          
-    m2 = random.randint(0,P)
-    (Kp,Ks) = KeyGen(P,G)     
-    (C1,B1) = Encrypt(Kp, m1)
-    (C2,B2) = Encrypt(Kp, m2)
-    C = (C1*C2) % Kp.p
-    B = (B1*B2) % Kp.p
-    m = Decrypt(Ks, (C,B) ,Kp)
-    if ( m ==  (m1*m2) % Kp.p):
+    nb_test = 100
+    cpt = 0
+    for i in range(0,nb_test):
+        m1 = random.randint(0,P)                          
+        m2 = random.randint(0,P)
+        (Kp,Ks) = KeyGen(P,G)     
+        (C1,B1) = Encrypt(Kp, m1)
+        (C2,B2) = Encrypt(Kp, m2)
+        C = (C1*C2) % Kp.p
+        B = (B1*B2) % Kp.p
+        m = Decrypt(Ks, (C,B) ,Kp)
+        if ( m ==  (m1*m2) % Kp.p):
+            print  ("iteration "+ str(i)+ " --> correct")
+            cpt = cpt + 1
+    if cpt == nb_test:
         print  (" le test de propriété homomorphique de El Gamal est verifié")
-
 
 
 if __name__ == '__main__':
     open(FILE_NAME,"w")  # créer un nouveau fichier
-    test_Euclide()
-    test_ExpMod()
+    #test_Euclide()
+    #test_ExpMod()
     testEncryptAndDecrypt()
     testHomomorphicPropertyOfElGamal()
