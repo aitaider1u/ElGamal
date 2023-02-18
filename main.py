@@ -1,16 +1,13 @@
 import random 
 import Crypto.Util.number  
 
-#to install it 
-#pip3 install pycryptodome==3.4.3
 
 P_HEX = "FFFFFFFFFFFFFFFFC90FDAA22168C234C4C6628B80DC1CD129024E088A67CC74020BBEA63B139B22514A08798E3404DDEF9519B3CD3A431B302B0A6DF25F14374FE1356D6D51C245E485B576625E7EC6F44C42E9A637ED6B0BFF5CB6F406B7EDEE386BFB5A899FA5AE9F24117C4B1FE649286651ECE65381FFFFFFFFFFFFFFFF"
 P = int(P_HEX,16) # to base 16
 G = 2
 FILE_NAME = "test.txt" 
 
-# inspirer de l'algo pseudocode de Wikipedia 
-# https://fr.wikipedia.org/wiki/Algorithme_d%27Euclide_étendu
+# inspirer de l'algo pseudocode de Wikipedia https://fr.wikipedia.org/wiki/Algorithme_d%27Euclide_étendu
 
 def Euclide(a,b):
     #initialisation 
@@ -26,7 +23,6 @@ def Euclide(a,b):
 def test_Euclide():
     print  ("\nLancement du test sur la fonction Euclide")
     print  ('\033[93m' + "\033[1mIndication\033[0m : Temps moyen du test est 3 seconds ")
-
     nb_test = 10000
     file  = open(FILE_NAME,"a")
     file.write("------> Les 5 premières occurences du test de la fonction Euclide()  : \n\n")
@@ -65,7 +61,6 @@ def test_ExpMod():
     print  ("\n---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----  ")
     print  ("\nLancement du test sur la fonction ExpMod")
     print  ('\033[93m' + "\033[1mIndication\033[0m : Temps moyen du test est 1 min 35 seconds ")
-
     nb_test = 10000
     file  = open(FILE_NAME,"a")
     file.write("\n\n\n\n------> Les 5 premières occurences du test de la fonction ExpMod()  : \n\n")
@@ -135,7 +130,6 @@ def testEncryptAndDecrypt():
     print  ("\n---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----  ")
     print  ("\nLancement du test sur les fonctions KeyGen ,Encrypt et Decrypt ")
     print  ('\033[93m' + "\033[1mIndication\033[0m : Temps moyen du test est 3 seconds ")
-
     nb_test = 100
     cpt = 0
     file  = open(FILE_NAME,"a")
@@ -163,7 +157,6 @@ def testHomomorphicPropertyOfElGamal():
     print  ("\n---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----  ")
     print  ("\nLancement du test de la propriété homomorphique de El Gamal ")
     print  ('\033[93m' + "\033[1mIndication\033[0m : Temps moyen du test est 4 seconds ")
-
     nb_test = 100
     cpt = 0
     for i in range(0,nb_test):
